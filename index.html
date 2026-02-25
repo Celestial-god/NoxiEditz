@@ -145,6 +145,25 @@
     .modal-close button:hover{background:rgba(180,0,255,.2);color:var(--text);}
     .modal iframe{width:100%;aspect-ratio:16/9;border:none;border-radius:12px;}
 
+    /* ── CREDITS SECTION ── */
+    .credits-btn-container{display:flex;justify-content:center;padding:0;}
+    .credits-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.3rem 1rem;border-radius:16px;border:1px solid rgba(180,0,255,.2);background:linear-gradient(145deg,rgba(180,0,255,.07),rgba(0,245,255,.03));text-align:center;color:var(--text);font-family:'Orbitron',sans-serif;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;transition:all .35s;gap:.5rem;cursor:pointer;min-height:auto;}
+    .credits-btn:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(180,0,255,.35);border-color:var(--accent);color:#fff;}
+    .credits-btn-icon{font-size:1.5rem;}
+    .credits-btn-text{font-weight:700;}
+    .credits-modal{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:2001;}
+    .credits-modal.active{display:flex;}
+    .credits-modal-content{width:90%;max-width:700px;background:#07030f;border-radius:20px;border:1px solid rgba(255,255,255,.16);padding:2rem;box-shadow:0 0 60px rgba(180,0,255,.25);max-height:80vh;overflow-y:auto;}
+    .credits-modal-close{text-align:right;margin-bottom:1.5rem;}
+    .credits-modal-close button{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);font-size:1.5rem;cursor:pointer;width:44px;height:44px;border-radius:50%;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+    .credits-modal-close button:hover{background:rgba(180,0,255,.2);color:var(--text);}
+    .credits-title{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;text-align:center;}
+    .credits-category{margin-bottom:2rem;}
+    .credits-category-title{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,245,255,.3);}
+    .credits-item{margin-bottom:1rem;padding:.8rem;background:rgba(180,0,255,.06);border-left:3px solid var(--accent);border-radius:8px;}
+    .credits-name{color:var(--text);font-weight:700;font-size:.95rem;margin-bottom:.2rem;}
+    .credits-role{color:var(--muted);font-size:.85rem;}
+
     /* ── PRICING CARDS ── */
     .pricing-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-bottom:2rem;}
     .pricing-card{background:var(--card);border-radius:20px;border:1px solid rgba(255,255,255,.09);padding:1.8rem;position:relative;transition:all .35s;overflow:hidden;}
@@ -287,6 +306,11 @@
       .pro-section{padding:1.2rem;}
       .pro-features-grid{grid-template-columns:1fr;}
       .audio-previews{grid-template-columns:1fr;}
+
+      /* credits */
+      .credits-btn-container{padding:.8rem 0;}
+      .credits-btn{padding:.85rem .5rem;font-size:.63rem;min-height:70px;}
+      .credits-btn-icon{font-size:1.2rem;}
 
       /* footer */
       .footer-nav-sections{grid-template-columns:repeat(2,1fr);gap:.6rem;}
@@ -638,6 +662,70 @@
         </div>
       </div>
     </section>
+
+    <div class="divider"></div>
+
+    <!-- CREDITS MODAL -->
+    <div class="credits-modal" id="creditsModal">
+      <div class="credits-modal-content">
+        <div class="credits-modal-close">
+          <button onclick="closeCredits()">✕</button>
+        </div>
+        <h2 class="credits-title">Credits</h2>
+        
+        <div class="credits-category">
+          <div class="credits-category-title">🎬 Audio Credits</div>
+          <div class="credits-item">
+            <div class="credits-name">SFX 9 - Warning/Correct Buzzer</div>
+            <div class="credits-role">By: EtherAudio</div>
+          </div>
+          <div class="credits-item">
+            <div class="credits-name">SFX Laser Shot (S)</div>
+            <div class="credits-role">By: bolkmar</div>
+          </div>
+          <div class="credits-item">
+            <div class="credits-name">SFX 9</div>
+            <div class="credits-role">By: EtherAudio</div>
+          </div>
+        </div>
+
+        <div class="credits-category">
+          <div class="credits-category-title">🎨 Fonts</div>
+          <div class="credits-item">
+            <div class="credits-name">Orbitron</div>
+            <div class="credits-role">Google Fonts - For Headings</div>
+          </div>
+          <div class="credits-item">
+            <div class="credits-name">Rajdhani</div>
+            <div class="credits-role">Google Fonts - For Body Text</div>
+          </div>
+        </div>
+
+        <div class="credits-category">
+          <div class="credits-category-title">🎥 Resources</div>
+          <div class="credits-item">
+            <div class="credits-name">thumbnail Images</div>
+            <div class="credits-role">YouTube API - HQ Thumbnails</div>
+          </div>
+          <div class="credits-item">
+            <div class="credits-name">Featured Twixtor Collection</div>
+            <div class="credits-role">Demon Slayer Anime Clips</div>
+          </div>
+        </div>
+
+        <div class="credits-category">
+          <div class="credits-category-title">⚡ Built With</div>
+          <div class="credits-item">
+            <div class="credits-name">HTML5 &amp; CSS3</div>
+            <div class="credits-role">Modern Web Standards</div>
+          </div>
+          <div class="credits-item">
+            <div class="credits-name">Vanilla JavaScript</div>
+            <div class="credits-role">No Framework - Pure JS</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- FOOTER -->
@@ -660,6 +748,12 @@
           <span class="fnc-icon">🔝</span>
           Top
         </a>
+      </div>
+      <div class="credits-btn-container">
+        <button class="credits-btn" onclick="openCredits()">
+          <span class="credits-btn-icon">©️</span>
+          <span class="credits-btn-text">Credits</span>
+        </button>
       </div>
       <div class="footer-inner">
         <p class="footer-copy">© 2026 NOXI Editz · Anime &amp; Gaming Video Editor from India</p>
@@ -727,11 +821,25 @@
     document.getElementById('twixtor-modal').addEventListener('click', function(e) {
       if (e.target === this) closeTwixtor();
     });
+    document.getElementById('creditsModal').addEventListener('click', function(e) {
+      if (e.target === this) closeCredits();
+    });
 
     // Close on Escape
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeVideo(); closeTwixtor(); }
+      if (e.key === 'Escape') { closeVideo(); closeTwixtor(); closeCredits(); }
     });
+
+    // Credits functions
+    function openCredits() {
+      document.getElementById('creditsModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCredits() {
+      document.getElementById('creditsModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
 
     // Hero video click
     document.querySelector('.hero-thumb').addEventListener('click', function() {
