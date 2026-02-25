@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NOXI Editz | Anime & Gaming Video Editor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{--bg:#04020d;--accent:#b400ff;--accent2:#7000ff;--cyan:#00f5ff;--text:#f0eeff;--muted:#9090b8;--gold:#f9c846;--card:#0d0820;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;overflow-x:hidden;}
+    body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden;-webkit-text-size-adjust:100%;}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(180,0,255,.18) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 90% 80%,rgba(0,245,255,.07) 0%,transparent 60%);pointer-events:none;z-index:0;}
+    a{color:var(--accent);text-decoration:none;}
+    .container{width:94%;max-width:1140px;margin:0 auto;position:relative;z-index:1;}
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-track{background:var(--bg);}
+    ::-webkit-scrollbar-thumb{background:var(--accent2);border-radius:99px;}
+
+    /* ── HEADER ── */
+    header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(4,2,13,.75);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(180,0,255,.18);}
+    header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--cyan),transparent);}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.8rem 0;}
+    .logo{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--text);}
+    .logo span{color:var(--accent);text-shadow:0 0 16px rgba(180,0,255,.8);}
+    nav ul{list-style:none;display:flex;gap:2rem;font-size:.82rem;text-transform:uppercase;letter-spacing:.1em;}
+    nav a{color:var(--muted);position:relative;padding-bottom:3px;transition:color .25s;}
+    nav a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width .3s;}
+    nav a:hover{color:var(--text);}
+    nav a:hover::after{width:100%;}
+
+    main{padding-top:4.5rem;}
+    section{padding:5rem 0;}
+    #hero{padding-top:1.5rem;}
+
+    /* ── SECTION TITLES ── */
+    .section-label{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(180,0,255,.4);padding:.25rem .75rem;border-radius:999px;margin-bottom:.9rem;background:rgba(180,0,255,.07);}
+    .section-title{font-family:'Orbitron',sans-serif;font-size:1.9rem;text-transform:uppercase;font-weight:700;line-height:1.15;margin-bottom:.5rem;background:linear-gradient(135deg,#fff 40%,rgba(180,0,255,.8));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .section-sub{color:var(--muted);font-size:1rem;margin-bottom:2.2rem;max-width:640px;}
+
+    /* ── BUTTON ── */
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.8rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;text-transform:uppercase;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.08em;transition:all .3s;position:relative;overflow:hidden;touch-action:manipulation;min-height:44px;}
+    .btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .3s;}
+    .btn:hover::before{opacity:1;}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(180,0,255,.55);}
+    .btn-outline{background:transparent;border:1.5px solid var(--accent);color:var(--accent);}
+    .btn-outline:hover{background:var(--accent);color:#fff;box-shadow:0 8px 30px rgba(180,0,255,.4);}
+
+    /* ── HERO ── */
+    #hero{min-height:92vh;display:flex;align-items:center;position:relative;}
+    #hero::before{content:'';position:absolute;top:10%;left:-20%;width:min(600px,150vw);height:min(600px,150vw);background:radial-gradient(circle,rgba(180,0,255,.12),transparent 70%);pointer-events:none;animation:floatGlow 8s ease-in-out infinite;}
+    @keyframes floatGlow{0%,100%{transform:translate(0,0);}50%{transform:translate(30px,-30px);}}
+    .hero-inner{display:grid;grid-template-columns:1.15fr .9fr;gap:3rem;align-items:center;}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.2rem;}
+    .hero-eyebrow span{display:inline-block;width:28px;height:1px;background:var(--cyan);}
+    .hero-left h1{font-family:'Orbitron',sans-serif;font-size:3.2rem;text-transform:uppercase;line-height:1.08;margin-bottom:1.2rem;font-weight:900;}
+    .hero-left h1 .line1{display:block;background:linear-gradient(135deg,var(--accent),#ff6ef7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-left h1 .line2{display:block;color:var(--text);}
+    .hero-desc{color:var(--muted);font-size:1.05rem;max-width:480px;margin-bottom:1.8rem;line-height:1.7;}
+    .hero-ctas{display:flex;gap:.9rem;margin-bottom:1.8rem;flex-wrap:wrap;}
+    .hero-stats{display:flex;gap:2rem;margin-top:1.6rem;padding-top:1.6rem;border-top:1px solid rgba(255,255,255,.07);}
+    .stat-item{text-align:center;}
+    .stat-num{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:700;color:var(--gold);}
+    .stat-label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+
+    .hero-card{background:linear-gradient(145deg,#160b30,#07030f);border-radius:26px;border:1px solid rgba(180,0,255,.22);padding:1.2rem;box-shadow:0 0 60px rgba(180,0,255,.2),inset 0 1px 0 rgba(255,255,255,.07);position:relative;overflow:hidden;}
+    .hero-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(180,0,255,.6),transparent);}
+    .hero-screen{border-radius:14px;overflow:hidden;background:#000;position:relative;}
+    .hero-thumb{width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;cursor:pointer;position:relative;transition:transform .3s;}
+    .hero-thumb:hover{transform:scale(1.02);}
+    .play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);opacity:0;transition:opacity .3s;}
+    .play-overlay svg{width:56px;height:56px;filter:drop-shadow(0 0 12px rgba(180,0,255,.8));}
+    .hero-thumb:hover .play-overlay{opacity:1;}
+    .hero-chip{margin-top:.9rem;display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--muted);padding:.3rem .2rem;}
+    .hero-chip span:last-child{color:var(--gold);font-weight:700;}
+    .chip-dot{width:6px;height:6px;border-radius:50%;background:#00e676;display:inline-block;margin-right:.4rem;animation:pulse-green 1.5s infinite;}
+    @keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(0,230,118,.5);}50%{box-shadow:0 0 0 5px rgba(0,230,118,0);}}
+
+    /* ── SOCIAL BUTTONS ── */
+    .hero-socials{display:flex;gap:.85rem;flex-wrap:wrap;}
+    .social-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.3rem;border-radius:999px;border:1.5px solid;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;text-transform:uppercase;letter-spacing:.07em;transition:all .3s;cursor:pointer;touch-action:manipulation;min-height:44px;}
+    .social-btn svg{width:1rem;height:1rem;flex-shrink:0;}
+    .insta-btn{border-color:rgba(225,48,108,.6);color:#e1306c;background:rgba(225,48,108,.06);}
+    .insta-btn:hover{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border-color:transparent;color:#fff;transform:translateY(-3px);box-shadow:0 6px 24px rgba(225,48,108,.5);}
+    .discord-btn{border-color:rgba(88,101,242,.6);color:#7289da;background:rgba(88,101,242,.06);}
+    .discord-btn:hover{background:#5865f2;border-color:#5865f2;color:#fff;transform:translateY(-3px);box-shadow:0 6px 24px rgba(88,101,242,.5);}
+
+    /* ── DIVIDER ── */
+    .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(180,0,255,.35),rgba(0,245,255,.25),transparent);margin:0;}
+
+    /* ── TWIXTOR ── */
+    #twixtor{position:relative;}
+    #twixtor::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(180,0,255,.05),rgba(0,245,255,.04));pointer-events:none;}
+    .twixtor-banner{position:relative;border-radius:22px;border:1.5px solid rgba(180,0,255,.5);overflow:hidden;cursor:pointer;transition:all .35s;box-shadow:0 0 40px rgba(180,0,255,.25);}
+    .twixtor-banner:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(180,0,255,.55);}
+    .twixtor-image{width:100%;aspect-ratio:21/9;object-fit:cover;filter:brightness(.75) saturate(1.1);transition:all .4s;}
+    .twixtor-banner:hover .twixtor-image{filter:brightness(.9) saturate(1.2);}
+    .twixtor-overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.5) 55%,transparent 80%);display:flex;flex-direction:column;justify-content:center;padding:3.5rem;}
+    .twixtor-overlay h2{font-family:'Orbitron',sans-serif;font-size:2.4rem;text-transform:uppercase;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(249,200,70,.6);margin-bottom:.6rem;line-height:1.1;}
+    .twixtor-browse{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--cyan);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-top:.4rem;}
+    .twixtor-browse svg{width:.9rem;height:.9rem;transition:transform .3s;}
+    .twixtor-banner:hover .twixtor-browse svg{transform:translateX(5px);}
+
+    /* ── TWIXTOR MODAL ── */
+    .twixtor-modal{display:none;position:fixed;inset:0;background:rgba(2,0,10,.94);backdrop-filter:blur(12px);z-index:2000;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
+    .twixtor-modal.active{display:flex;}
+    .twixtor-modal-content{width:100%;max-width:1020px;background:#07030f;border-radius:22px;border:1px solid rgba(255,255,255,.12);padding:2.2rem;position:relative;align-self:flex-start;box-shadow:0 0 60px rgba(180,0,255,.2);}
+    .twixtor-modal-close{position:absolute;top:1.4rem;right:1.4rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);font-size:1.2rem;cursor:pointer;z-index:10;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .twixtor-modal-close:hover{background:rgba(180,0,255,.2);color:var(--text);border-color:var(--accent);}
+    .twixtor-modal-title{font-family:'Orbitron',sans-serif;font-size:1.7rem;text-transform:uppercase;margin-bottom:.5rem;color:var(--gold);}
+    .twixtor-modal-sub{font-size:.8rem;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin-bottom:2rem;display:flex;align-items:center;gap:.5rem;}
+    .twixtor-modal-sub::before{content:'';display:block;width:20px;height:1px;background:var(--accent);}
+
+    .twixtor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1.2rem;}
+    .twixtor-item{position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(180,0,255,.25);cursor:pointer;transition:all .3s;background:var(--card);}
+    .twixtor-item:hover{transform:translateY(-6px);box-shadow:0 12px 35px rgba(180,0,255,.45);border-color:var(--accent);}
+    .twixtor-thumb{width:100%;aspect-ratio:3/4;object-fit:cover;filter:brightness(.75);transition:all .3s;}
+    .twixtor-item:hover .twixtor-thumb{filter:brightness(.95);}
+    .twixtor-info{padding:.75rem;background:linear-gradient(0deg,rgba(0,0,0,.9),rgba(180,0,255,.12));text-align:center;}
+    .twixtor-name{font-weight:700;font-size:.9rem;color:var(--gold);margin-bottom:.15rem;}
+    .twixtor-anime{font-size:.78rem;color:var(--muted);}
+    .twixtor-dl{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--cyan);text-transform:uppercase;letter-spacing:.08em;margin-top:.35rem;}
+
+    /* ── PORTFOLIO ── */
+    #portfolio{position:relative;}
+    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;}
+    .portfolio-item{position:relative;border-radius:16px;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.08);cursor:pointer;}
+    .portfolio-thumb{aspect-ratio:16/9;background-size:cover;background-position:center;filter:brightness(.72);transition:all .35s;}
+    .portfolio-item:hover .portfolio-thumb{transform:scale(1.06);filter:brightness(.95);}
+    .portfolio-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,transparent 50%);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;}
+    .portfolio-item:hover .portfolio-overlay{opacity:1;}
+    .play-btn{width:52px;height:52px;border-radius:50%;background:rgba(180,0,255,.85);display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3);box-shadow:0 0 30px rgba(180,0,255,.6);transform:scale(.8);transition:transform .3s;}
+    .portfolio-item:hover .play-btn{transform:scale(1);}
+    .play-btn svg{width:20px;height:20px;margin-left:3px;}
+
+    /* ── MODAL ── */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:2000;}
+    .modal.active{display:flex;}
+    .modal-inner{width:90%;max-width:820px;background:#07030f;border-radius:20px;border:1px solid rgba(255,255,255,.16);padding:1.2rem;box-shadow:0 0 60px rgba(180,0,255,.25);}
+    .modal-close{text-align:right;margin-bottom:.5rem;}
+    .modal-close button{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);font-size:1rem;cursor:pointer;width:34px;height:34px;border-radius:50%;transition:all .2s;}
+    .modal-close button:hover{background:rgba(180,0,255,.2);color:var(--text);}
+    .modal iframe{width:100%;aspect-ratio:16/9;border:none;border-radius:12px;}
+
+    /* ── PRICING CARDS ── */
+    .pricing-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-bottom:2rem;}
+    .pricing-card{background:var(--card);border-radius:20px;border:1px solid rgba(255,255,255,.09);padding:1.8rem;position:relative;transition:all .35s;overflow:hidden;}
+    .pricing-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(180,0,255,.07),rgba(0,245,255,.04));opacity:0;transition:opacity .35s;}
+    .pricing-card:hover{transform:translateY(-6px);border-color:rgba(180,0,255,.5);box-shadow:0 16px 50px rgba(180,0,255,.2);}
+    .pricing-card:hover::before{opacity:1;}
+    .pricing-card.featured{border-color:rgba(180,0,255,.5);background:linear-gradient(145deg,#190840,#07030f);box-shadow:0 0 40px rgba(180,0,255,.2);}
+    .pricing-card.featured::after{content:'POPULAR';position:absolute;top:1rem;right:1rem;font-size:.65rem;letter-spacing:.12em;padding:.25rem .6rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;}
+    .pricing-icon{font-size:2rem;margin-bottom:.8rem;}
+    .pricing-name{font-family:'Orbitron',sans-serif;font-size:1rem;text-transform:uppercase;font-weight:700;margin-bottom:.3rem;}
+    .pricing-price-val{font-size:1.8rem;font-weight:700;color:var(--gold);margin-bottom:.2rem;font-family:'Orbitron',sans-serif;}
+    .pricing-duration{font-size:.8rem;color:var(--muted);margin-bottom:1.2rem;}
+    .pricing-features{list-style:none;margin-bottom:1.4rem;}
+    .pricing-features li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.92rem;color:var(--muted);display:flex;align-items:center;gap:.5rem;}
+    .pricing-features li::before{content:'✦';color:var(--accent);font-size:.7rem;flex-shrink:0;}
+
+    /* ── COURSE ── */
+    .course-card{background:linear-gradient(145deg,#130930,#07030f);border-radius:22px;padding:2rem;border:1px solid rgba(180,0,255,.3);position:relative;overflow:hidden;}
+    .course-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan));}
+    .course-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+    .course-title{font-family:'Orbitron',sans-serif;margin-bottom:.5rem;text-transform:uppercase;font-size:1.3rem;}
+    .course-price{font-size:1rem;color:var(--gold);margin-bottom:1.4rem;display:flex;align-items:baseline;gap:.5rem;}
+    .course-price strong{font-size:2rem;font-family:'Orbitron',sans-serif;}
+    .course-list{list-style:none;display:flex;flex-direction:column;gap:.7rem;}
+    .course-list li{display:flex;align-items:center;gap:.7rem;font-size:.95rem;color:var(--muted);}
+    .course-list li span.ci{width:22px;height:22px;border-radius:50%;background:rgba(180,0,255,.2);border:1px solid rgba(180,0,255,.4);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--accent);flex-shrink:0;}
+    .course-preview{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.1);aspect-ratio:16/9;background:#000;}
+    .course-preview iframe{width:100%;height:100%;border:none;}
+
+    /* ── PRO SFX ── */
+    .pro-section{background:linear-gradient(145deg,#1a1200,#07030f);border-radius:22px;padding:2rem;border:1px solid rgba(249,200,70,.3);position:relative;overflow:hidden;}
+    .pro-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),#f18b1b,var(--gold));}
+    .pro-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .9rem;border-radius:999px;background:linear-gradient(135deg,var(--gold),#f18b1b);font-size:.72rem;text-transform:uppercase;color:#1a0800;font-weight:700;letter-spacing:.1em;margin-bottom:.9rem;}
+    .pro-title{font-family:'Orbitron',sans-serif;text-transform:uppercase;margin-bottom:.5rem;font-size:1.6rem;}
+    .pro-features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin:1.4rem 0;}
+    .pro-feat{background:rgba(0,0,0,.3);border-radius:12px;padding:.9rem 1rem;border:1px solid rgba(249,200,70,.15);display:flex;align-items:center;gap:.7rem;font-size:.9rem;color:#f9e7b6;}
+    .pro-feat::before{content:'✦';color:var(--gold);flex-shrink:0;}
+    .audio-previews{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.2rem;}
+    .audio-previews audio{width:100%;accent-color:var(--accent);}
+    .audio-label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;}
+
+    /* ── FOOTER ── */
+    footer{border-top:1px solid rgba(255,255,255,.06);padding:3rem 0 1.5rem;font-size:.9rem;color:var(--muted);background:rgba(2,0,9,.9);}
+    .footer-nav-sections{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+    .footer-nav-card{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.3rem 1rem;border-radius:16px;border:1px solid rgba(180,0,255,.2);background:linear-gradient(145deg,rgba(180,0,255,.07),rgba(0,245,255,.03));text-align:center;color:var(--text);font-family:'Orbitron',sans-serif;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;transition:all .35s;gap:.5rem;}
+    .footer-nav-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(180,0,255,.35);border-color:var(--accent);color:#fff;}
+    .footer-nav-card .fnc-icon{font-size:1.5rem;}
+    .footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05);}
+    .footer-copy{font-size:.82rem;}
+    .footer-tagline{font-size:.78rem;color:rgba(180,0,255,.6);font-family:'Orbitron',sans-serif;text-transform:uppercase;letter-spacing:.1em;}
+
+    /* ── SCROLL REVEAL ── */
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1);}
+    .reveal.visible{opacity:1;transform:none;}
+    .reveal-delay-1{transition-delay:.1s;}
+    .reveal-delay-2{transition-delay:.2s;}
+    .reveal-delay-3{transition-delay:.3s;}
+
+    /* ── HAMBURGER ── */
+    .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.4rem;background:none;border:none;}
+    .nav-toggle span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s;}
+    .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .nav-toggle.open span:nth-child(2){opacity:0;}
+    .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:880px){
+      .hero-inner{grid-template-columns:1fr;}
+      .hero-right{order:-1;}
+      .hero-left h1{font-size:2.3rem;}
+      .twixtor-overlay{padding:1.8rem;}
+      .twixtor-overlay h2{font-size:1.7rem;}
+      .course-grid{grid-template-columns:1fr;}
+      .footer-nav-sections{grid-template-columns:repeat(2,1fr);}
+      .pricing-cards{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+    }
+
+    @media(max-width:640px){
+      /* nav */
+      .nav-toggle{display:flex;min-width:44px;min-height:44px;align-items:center;justify-content:center;}
+      nav{position:fixed;top:3.4rem;left:0;right:0;background:rgba(4,2,13,.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(180,0,255,.2);padding:0 1.2rem 1rem;transform:translateY(-110%);opacity:0;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .3s;z-index:999;}
+      nav.open{transform:translateY(0);opacity:1;}
+      nav ul{flex-direction:column;gap:0;}
+      nav ul li{border-bottom:1px solid rgba(255,255,255,.06);}
+      nav a{display:flex;align-items:center;padding:.9rem 0;font-size:1rem;color:var(--text);min-height:48px;}
+
+      /* general */
+      section{padding:2.5rem 0;}
+      #hero{min-height:auto;padding-top:.5rem;padding-bottom:2rem;}
+      main{padding-top:3.6rem;}
+
+      /* hero – text always on top, video below */
+      .hero-inner{grid-template-columns:1fr;gap:1.5rem;}
+      .hero-left{order:1;}
+      .hero-right{order:2;}
+      .hero-left h1{font-size:1.95rem;margin-bottom:.8rem;}
+      .hero-desc{font-size:.93rem;margin-bottom:1.1rem;max-width:100%;}
+      .hero-ctas{gap:.6rem;flex-wrap:wrap;}
+      .btn{padding:.65rem 1.3rem;font-size:.83rem;}
+      .hero-stats{gap:.8rem;flex-wrap:wrap;margin-top:1.2rem;padding-top:1.2rem;}
+      .stat-num{font-size:1.1rem;}
+      .stat-label{font-size:.7rem;}
+      .hero-eyebrow{font-size:.7rem;margin-bottom:.7rem;}
+      .hero-socials{gap:.55rem;}
+      .social-btn{padding:.5rem .95rem;font-size:.78rem;}
+      .hero-card{padding:.85rem;}
+
+      /* twixtor banner */
+      .twixtor-image{aspect-ratio:4/3;}
+      .twixtor-overlay{padding:1.2rem;}
+      .twixtor-overlay h2{font-size:1.3rem;}
+      .twixtor-browse{font-size:.76rem;}
+
+      /* twixtor modal */
+      .twixtor-modal-content{padding:1rem;}
+      .twixtor-modal-title{font-size:1.1rem;}
+      .twixtor-grid{grid-template-columns:repeat(2,1fr);gap:.7rem;}
+
+      /* portfolio */
+      .portfolio-overlay{opacity:1;background:linear-gradient(0deg,rgba(0,0,0,.65) 0%,transparent 60%);}
+      .play-btn{transform:scale(1);}
+      .portfolio-grid{grid-template-columns:repeat(2,1fr);gap:.6rem;}
+
+      /* pricing – single column on phones */
+      .pricing-cards{grid-template-columns:1fr;gap:.8rem;}
+      .pricing-card{padding:1.3rem;}
+      .pricing-price-val{font-size:1.5rem;}
+
+      /* section labels & titles */
+      .section-title{font-size:1.45rem;}
+      .section-sub{font-size:.88rem;margin-bottom:1.3rem;}
+
+      /* course */
+      .course-card{padding:1.2rem;}
+      .course-title{font-size:1.05rem;}
+      .course-price strong{font-size:1.5rem;}
+
+      /* pro */
+      .pro-title{font-size:1.15rem;}
+      .pro-section{padding:1.2rem;}
+      .pro-features-grid{grid-template-columns:1fr;}
+      .audio-previews{grid-template-columns:1fr;}
+
+      /* footer */
+      .footer-nav-sections{grid-template-columns:repeat(2,1fr);gap:.6rem;}
+      .footer-nav-card{padding:.85rem .5rem;font-size:.63rem;min-height:70px;}
+      .footer-inner{flex-direction:column;gap:.5rem;text-align:center;}
+      .footer-copy{font-size:.75rem;}
+
+      /* modals */
+      .modal-inner{width:96%;padding:.9rem .75rem;}
+      .modal iframe{border-radius:10px;}
+      .twixtor-modal{padding:1rem .5rem;}
+      .twixtor-modal-content{padding:.9rem .75rem;border-radius:14px;}
+
+      /* overflow guard */
+      .hero-card{max-width:100%;overflow:hidden;}
+      .course-card{overflow:hidden;}
+      .pro-section{overflow:hidden;}
+      .pricing-card.featured::after{font-size:.58rem;padding:.2rem .45rem;top:.7rem;right:.7rem;}
+
+      /* word wrap for headings */
+      .section-title,.hero-left h1,.twixtor-overlay h2,.pro-title{word-break:break-word;overflow-wrap:break-word;}
+    }
+
+    @media(max-width:480px){
+      .hero-left h1{font-size:1.8rem;}
+      .hero-desc{font-size:.9rem;}
+      .hero-stats{gap:.5rem;}
+      .stat-num{font-size:1rem;}
+      .stat-label{font-size:.65rem;}
+      .section-title{font-size:1.3rem;}
+      .section-sub{font-size:.85rem;}
+      .btn{font-size:.8rem;padding:.6rem 1.1rem;}
+      .twixtor-grid{grid-template-columns:repeat(2,1fr);gap:.5rem;}
+      .twixtor-name{font-size:.82rem;}
+      .twixtor-anime{font-size:.72rem;}
+      .portfolio-grid{grid-template-columns:repeat(2,1fr);gap:.5rem;}
+      .pricing-cards{grid-template-columns:1fr;}
+      .course-price strong{font-size:1.4rem;}
+      .pro-features-grid{grid-template-columns:1fr;}
+      .audio-previews{grid-template-columns:1fr;}
+      .footer-nav-sections{grid-template-columns:repeat(2,1fr);}
+      .hero-socials{gap:.4rem;}
+      .social-btn{font-size:.75rem;padding:.5rem .9rem;}
+      .hero-card{padding:.6rem;}
+      .hero-chip{font-size:.72rem;}
+      .twixtor-overlay h2{font-size:1.1rem;}
+      .twixtor-overlay{padding:.9rem;}
+    }
+
+    @media(max-width:380px){
+      .hero-left h1{font-size:1.5rem;}
+      .portfolio-grid{grid-template-columns:1fr;}
+      .hero-ctas{flex-direction:column;align-items:stretch;}
+      .hero-ctas .btn{width:100%;justify-content:center;text-align:center;}
+      .hero-socials{flex-direction:column;align-items:stretch;gap:.4rem;}
+      .social-btn{width:100%;justify-content:center;}
+      .hero-stats{justify-content:space-around;gap:.3rem;padding-top:1rem;margin-top:1rem;}
+      .stat-num{font-size:.95rem;}
+      .stat-label{font-size:.6rem;}
+      .section-title{font-size:1.2rem;}
+      .section-label{font-size:.6rem;}
+      .btn{font-size:.78rem;}
+      .twixtor-grid{grid-template-columns:repeat(2,1fr);gap:.4rem;}
+      .footer-nav-sections{gap:.4rem;}
+      .footer-nav-card{font-size:.58rem;padding:.7rem .3rem;}
+      .modal-inner{padding:.7rem .5rem;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">NO<span>XI</span></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="mainNav">
+        <ul>
+          <li><a href="#portfolio" onclick="closeNav()">Portfolio</a></li>
+          <li><a href="#services" onclick="closeNav()">Services</a></li>
+          <li><a href="#course" onclick="closeNav()">Course</a></li>
+          <li><a href="#pro" onclick="closeNav()">Pro</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero">
+      <div class="container hero-inner">
+        <div class="hero-left">
+          <div class="hero-eyebrow"><span></span> Professional Anime Editor</div>
+          <h1>
+            <span class="line1">Anime &amp; Gaming</span>
+            <span class="line2">Video Editing</span>
+          </h1>
+          <p class="hero-desc">Professional SFX-heavy edits for YouTube, Shorts &amp; Reels — cinematic quality starting at ₹100.</p>
+          <div class="hero-ctas">
+            <button class="btn" onclick="document.getElementById('twixtor').scrollIntoView({behavior:'smooth'})">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              Free Twixtor
+            </button>
+            <button class="btn btn-outline" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">Portfolio</button>
+          </div>
+          <div class="hero-socials">
+            <a href="https://www.instagram.com/noxi_editz?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="social-btn insta-btn" title="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.311.975.975 1.249 2.242 1.311 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.336 2.633-1.311 3.608-.975.975-2.242 1.249-3.608 1.311-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.336-3.608-1.311-.975-.975-1.249-2.242-1.311-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.336-2.633 1.311-3.608C4.519 2.499 5.786 2.225 7.152 2.163 8.418 2.105 8.798 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038C23.986 15.668 24 15.259 24 12s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+              <span>Instagram</span>
+            </a>
+            <a href="https://discord.gg/m7qy8X9w" target="_blank" class="social-btn discord-btn" title="Discord">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+              <span>Discord</span>
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Projects</div></div>
+            <div class="stat-item"><div class="stat-num">₹100</div><div class="stat-label">Starting At</div></div>
+            <div class="stat-item"><div class="stat-num">1080p</div><div class="stat-label">All Edits</div></div>
+          </div>
+        </div>
+
+        <div class="hero-right reveal">
+          <div class="hero-card">
+            <div class="hero-screen">
+              <div class="hero-thumb" data-video="https://www.youtube.com/embed/s8AnTvRoGMQ?autoplay=1" style="background-image:url('https://img.youtube.com/vi/s8AnTvRoGMQ/hqdefault.jpg');">
+                <div class="play-overlay">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="white" stroke="none"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="hero-chip">
+              <span><span class="chip-dot"></span>Featured Reel</span>
+              <span>₹100–₹500</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- FREE ANIME TWIXTOR -->
+    <section id="twixtor">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Free Resource</div>
+          <h2 class="section-title">Anime Twixtor Database</h2>
+          <p class="section-sub">High-quality anime slow-motion clips — completely free for your edits.</p>
+        </div>
+        <div class="twixtor-banner reveal" onclick="openTwixtor()">
+          <img src="download.jpg" alt="Anime Mix" class="twixtor-image">
+          <div class="twixtor-overlay">
+            <h2>Free Anime Twixtor</h2>
+            <div class="twixtor-browse">
+              Browse Collection
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TWIXTOR MODAL -->
+    <div class="twixtor-modal" id="twixtor-modal">
+      <div class="twixtor-modal-content">
+        <button class="twixtor-modal-close" onclick="closeTwixtor()">✕</button>
+        <h3 class="twixtor-modal-title">Anime Twixtor Collection</h3>
+        <div class="twixtor-modal-sub">Demon Slayer Twixtor</div>
+        <div class="twixtor-grid" id="twixtor-grid"></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PORTFOLIO -->
+    <section id="portfolio">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">My Work</div>
+          <h2 class="section-title">Portfolio</h2>
+          <p class="section-sub">Click any video to watch — anime &amp; gaming edits in full cinematic quality.</p>
+        </div>
+        <div class="portfolio-grid">
+          <div class="portfolio-item reveal reveal-delay-1" onclick="openVideo('s8AnTvRoGMQ')">
+            <div class="portfolio-thumb" style="background-image:url('https://img.youtube.com/vi/s8AnTvRoGMQ/hqdefault.jpg');"></div>
+          </div>
+          <div class="portfolio-item reveal reveal-delay-2" onclick="openVideo('OIX_2emzxAs')">
+            <div class="portfolio-thumb" style="background-image:url('https://img.youtube.com/vi/OIX_2emzxAs/hqdefault.jpg');"></div>
+            <div class="portfolio-overlay"><div class="play-btn"><svg viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg></div></div>
+          </div>
+          <div class="portfolio-item reveal reveal-delay-3" onclick="openVideo('R8eREa3PH3I')">
+            <div class="portfolio-thumb" style="background-image:url('https://img.youtube.com/vi/R8eREa3PH3I/hqdefault.jpg');"></div>
+            <div class="portfolio-overlay"><div class="play-btn"><svg viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg></div></div>
+          </div>
+          <div class="portfolio-item reveal reveal-delay-1" onclick="openVideo('2JxbTmzjNiQ')">
+            <div class="portfolio-thumb" style="background-image:url('https://img.youtube.com/vi/2JxbTmzjNiQ/hqdefault.jpg');"></div>
+            <div class="portfolio-overlay"><div class="play-btn"><svg viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg></div></div>
+          </div>
+          <div class="portfolio-item reveal reveal-delay-2" onclick="openVideo('2PB2R-2ASuY')">
+            <div class="portfolio-thumb" style="background-image:url('https://img.youtube.com/vi/2PB2R-2ASuY/hqdefault.jpg');"></div>
+            <div class="portfolio-overlay"><div class="play-btn"><svg viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg></div></div>
+          </div>
+          <div class="portfolio-item reveal reveal-delay-3" onclick="openVideo('CskGAR1sT80')">
+            <div class="portfolio-thumb" style="background-image:url('https://img.youtube.com/vi/CskGAR1sT80/hqdefault.jpg');"></div>
+            <div class="portfolio-overlay"><div class="play-btn"><svg viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEO MODAL -->
+    <div class="modal" id="portfolioModal">
+      <div class="modal-inner">
+        <div class="modal-close">
+          <button onclick="closeVideo()">✕</button>
+        </div>
+        <iframe id="modalVideo" src="" title="Video Player" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SERVICES / PRICING -->
+    <section id="services">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Hire Me</div>
+          <h2 class="section-title">Services &amp; Pricing</h2>
+          <p class="section-sub">All edits delivered in 1080p within 24–48 hours. Pick your package below.</p>
+        </div>
+
+        <div class="pricing-cards">
+          <div class="pricing-card reveal reveal-delay-1">
+            <div class="pricing-icon">✂️</div>
+            <div class="pricing-name">Basic Edit</div>
+            <div class="pricing-price-val">₹100<span style="font-size:1rem;color:var(--muted);">–</span>₹200</div>
+            <ul class="pricing-features">
+              <li>Clean cuts &amp; transitions</li>
+              <li>Music sync</li>
+              <li>Basic color grade</li>
+              <li>1080p export</li>
+            </ul>
+            <button class="btn btn-outline">Book Now</button>
+          </div>
+
+          <div class="pricing-card featured reveal reveal-delay-2">
+            <div class="pricing-icon">⚡</div>
+            <div class="pricing-name">Pro Edit</div>
+            <div class="pricing-price-val">₹250<span style="font-size:1rem;color:var(--muted);">–</span>₹350</div>
+            <ul class="pricing-features">
+              <li>SFX hits &amp; sound design</li>
+              <li>Professional color grading</li>
+              <li>Anime-style transitions</li>
+              <li>Cinematic motion &amp; zoom</li>
+            </ul>
+            <button class="btn">Book Now</button>
+          </div>
+
+          <div class="pricing-card reveal reveal-delay-3">
+            <div class="pricing-icon">🎬</div>
+            <div class="pricing-name">Full Anime</div>
+            <div class="pricing-price-val">₹400<span style="font-size:1rem;color:var(--muted);">–</span>₹500</div>
+            <ul class="pricing-features">
+              <li>Custom SFX pack</li>
+              <li>Advanced transitions</li>
+              <li>Cinematic pacing &amp; flow</li>
+              <li>Priority delivery</li>
+            </ul>
+            <button class="btn btn-outline">Book Now</button>
+          </div>
+        </div>
+
+        <p style="font-size:.88rem;color:var(--muted);">Payments via UPI or WhatsApp · Send your idea, footage &amp; reference edits to get started.</p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- COURSE -->
+    <section id="course">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Learn</div>
+          <h2 class="section-title">Editing Course</h2>
+          <p class="section-sub">Master anime editing on low-end PCs using VSDC &amp; Lightworks — step by step.</p>
+        </div>
+
+        <div class="course-card reveal">
+          <div class="course-grid">
+            <div>
+              <h3 class="course-title">Video Editing Masterclass</h3>
+              <div class="course-price"><strong>₹299</strong> one-time payment</div>
+              <ul class="course-list">
+                <li><span class="ci">1</span>10 step-by-step video lessons</li>
+                <li><span class="ci">2</span>Project files &amp; templates</li>
+                <li><span class="ci">3</span>50 sound effects included</li>
+                <li><span class="ci">4</span>Low-end PC optimization tips</li>
+              </ul>
+              <button class="btn" style="margin-top:.8rem;">Buy Course — ₹299</button>
+            </div>
+            <div class="course-preview">
+              <iframe src="https://www.youtube.com/embed/s8AnTvRoGMQ" title="Course Preview" allowfullscreen loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PRO SFX VAULT -->
+    <section id="pro">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Exclusive</div>
+          <h2 class="section-title">Pro SFX Vault</h2>
+          <p class="section-sub">Unlock 200+ premium sound effects &amp; anime overlays used in professional edits.</p>
+        </div>
+
+        <div class="pro-section reveal">
+          <div class="pro-badge">⭐ Pro Membership</div>
+          <h2 class="pro-title">Unlock Full SFX Vault</h2>
+          <p style="color:#c9a96e;margin-bottom:1.2rem;font-size:1rem;">One-time access for just <strong style="color:var(--gold);font-family:'Orbitron',sans-serif;">₹99</strong> — lifetime access, no subscriptions.</p>
+
+          <div class="pro-features-grid">
+            <div class="pro-feat">200+ WAV/MP3 SFX files</div>
+            <div class="pro-feat">Anime transition presets</div>
+            <div class="pro-feat">Priority DM support</div>
+          </div>
+
+          <p style="font-size:.85rem;color:#b89050;margin-bottom:.8rem;text-transform:uppercase;letter-spacing:.1em;">Preview Samples</p>
+          <div class="audio-previews">
+            <div>
+              <div class="audio-label">SFX 9</div>
+              <audio controls><source src="EX%20SFX/sfx%209%20by%20EtherAudio.wav" type="audio/wav"></audio>
+            </div>
+            <div>
+              <div class="audio-label">Laser Shot</div>
+              <audio controls><source src="EX%20SFX/SFX%20Laser%20Shot%20(S)%20by%20bolkmar.wav" type="audio/wav"></audio>
+            </div>
+            <div>
+              <div class="audio-label">Warning Buzzer</div>
+              <audio controls><source src="EX%20SFX/sfx%20warning%20or%20correct%20buzzer%20by%20EtherAudio.wav" type="audio/wav"></audio>
+            </div>
+          </div>
+
+          <button class="btn" style="margin-top:1.5rem;background:linear-gradient(135deg,var(--gold),#f18b1b);color:#1a0800;">Unlock Pro Pack — ₹99</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-nav-sections">
+        <a href="#portfolio" class="footer-nav-card">
+          <span class="fnc-icon">🎬</span>
+          Portfolio
+        </a>
+        <a href="#services" class="footer-nav-card">
+          <span class="fnc-icon">⚙️</span>
+          Services
+        </a>
+        <a href="#course" class="footer-nav-card">
+          <span class="fnc-icon">📚</span>
+          Course
+        </a>
+        <a href="#hero" class="footer-nav-card">
+          <span class="fnc-icon">🔝</span>
+          Top
+        </a>
+      </div>
+      <div class="footer-inner">
+        <p class="footer-copy">© 2026 NOXI Editz · Anime &amp; Gaming Video Editor from India</p>
+        <span class="footer-tagline">Made with passion</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TWIXTOR DATA & JAVASCRIPT -->
+  <script>
+    const twixtorData = [
+      { name: 'Akaza', anime: 'Demon Slayer', thumb: '1.jpg', link: 'https://drive.google.com/file/d/1iz6qE7I4LGOLm4J5qx9H_uVuHIR5TkSi/view' },
+      { name: 'Giyu', anime: 'Demon Slayer', thumb: '2.jpg', link: 'https://drive.google.com/file/d/1pfpfbz0ObzI65ILhgu-psrCxPJ78pv48/view' },
+      { name: 'Doma', anime: 'Demon Slayer', thumb: '3.webp', link: 'https://drive.google.com/file/d/1MykYy0XFFhl2Zig1aL6hw4QNh-g6uHe8/view' },
+      { name: 'Tengen', anime: 'Demon Slayer', thumb: '4.jpg', link: 'https://drive.google.com/file/d/1ic59f8z9cjpYnLHuyOg6IKz8IaP3xs12/view' },
+      { name: 'Inouske', anime: 'Demon Slayer', thumb: '5.jpg', link: 'https://drive.google.com/file/d/1za3U6kFhVgTTIjjGphABcLFCYMkIXmAj/view' },
+      { name: 'Tanjiro', anime: 'Demon Slayer', thumb: '6.jpg', link: 'https://drive.google.com/file/d/1AHGbj2JL9-u4Htt_MWeRDnhPa947DJnm/view' },
+      { name: 'Nezuko', anime: 'Demon Slayer', thumb: '8.jpg', link: 'https://drive.google.com/file/d/1XzSDyeuyp8qfYUguKt5rKjd1EWp0P1Z3/view' },
+      { name: 'Upper Moon 4', anime: 'Demon Slayer', thumb: '7.jpg', link: 'https://drive.google.com/file/d/12-he6gQ0aFBZq4fLiP9_qu96oL7unZo2/view' },
+      { name: 'Tanjiro vs Rui', anime: 'Demon Slayer', thumb: '9.jpg', link: 'https://drive.google.com/file/d/1VkJoNxg4Jar6w_uMyA8AnErbFdcPOuTp/view' },
+      { name: 'Rengoku', anime: 'Demon Slayer', thumb: '10.jpg', link: 'https://drive.google.com/file/d/1clJHsn_D2SI5VHYZY4Y3Dpotxp96oN2X/view' },
+    ];
+
+    function openTwixtor() {
+      const grid = document.getElementById('twixtor-grid');
+      grid.innerHTML = twixtorData.map(item => `
+        <div class="twixtor-item" onclick="window.open('${item.link}', '_blank')">
+          <img src="${item.thumb}" alt="${item.name}" class="twixtor-thumb">
+          <div class="twixtor-info">
+            <div class="twixtor-name">${item.name}</div>
+            <div class="twixtor-anime">${item.anime}</div>
+            <div class="twixtor-dl">↓ Download</div>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('twixtor-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeTwixtor() {
+      document.getElementById('twixtor-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function openVideo(id) {
+      const modal = document.getElementById('portfolioModal');
+      const iframe = document.getElementById('modalVideo');
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideo() {
+      const modal = document.getElementById('portfolioModal');
+      const iframe = document.getElementById('modalVideo');
+      modal.classList.remove('active');
+      iframe.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // Close modals on background click
+    document.getElementById('portfolioModal').addEventListener('click', function(e) {
+      if (e.target === this) closeVideo();
+    });
+    document.getElementById('twixtor-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeTwixtor();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeVideo(); closeTwixtor(); }
+    });
+
+    // Hero video click
+    document.querySelector('.hero-thumb').addEventListener('click', function() {
+      openVideo('s8AnTvRoGMQ');
+    });
+
+    // Hamburger menu
+    const navToggle = document.getElementById('navToggle');
+    const mainNav = document.getElementById('mainNav');
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('open');
+      mainNav.classList.toggle('open');
+    });
+    function closeNav() {
+      navToggle.classList.remove('open');
+      mainNav.classList.remove('open');
+    }
+
+    // Scroll reveal
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('visible');
+          revealObserver.unobserve(el.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>
